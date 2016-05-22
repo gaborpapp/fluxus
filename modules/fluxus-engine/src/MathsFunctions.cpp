@@ -1157,6 +1157,26 @@ Scheme_Object *qtomatrix(int argc, Scheme_Object **argv)
 }
 
 // StartFunctionDoc-en
+// matrixtoq matrix-vector
+// Returns: quaternion-vector
+// Description:
+// Converts a rotation matrix into a quaternion.
+// Example:
+// (matrixtoq (mrotate (vector 0 45 0)))
+// EndFunctionDoc
+
+Scheme_Object *matrixtoq(int argc, Scheme_Object **argv)
+{
+	DECL_ARGV();
+	ArgCheck("matrixtoq", "m", argc, argv);
+
+	dMatrix m=MatrixFromScheme(argv[0]);
+	dQuat q(m);
+	MZ_GC_UNREG();
+	return FloatsToScheme(q.arr(),4);
+}
+
+// StartFunctionDoc-en
 // qconjugate quaternion-vector
 // Returns: quaternion-vector
 // Description:
@@ -1543,6 +1563,7 @@ void MathsFunctions::AddGlobals(Scheme_Env *env)
 	scheme_add_global("qmul", scheme_make_prim_w_arity(qmul, "qmul", 2, 2), env);
 	scheme_add_global("qnormalise", scheme_make_prim_w_arity(qnormalise, "qnormalise", 1, 1), env);
 	scheme_add_global("qtomatrix", scheme_make_prim_w_arity(qtomatrix, "qtomatrix", 1, 1), env);
+	scheme_add_global("matrixtoq", scheme_make_prim_w_arity(matrixtoq, "matrixtoq", 1, 1), env);
 	scheme_add_global("qconjugate", scheme_make_prim_w_arity(qconjugate, "qconjugate", 1, 1), env);
 	scheme_add_global("fmod", scheme_make_prim_w_arity(fmod, "fmod", 2, 2), env);
 	scheme_add_global("snoise", scheme_make_prim_w_arity(snoise, "snoise", 1, 4), env);
